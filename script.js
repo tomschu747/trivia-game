@@ -163,6 +163,20 @@
         // - Email: basic valid shape (example: a@b.com)
         // - Show errors in errName / errEmail
         // - Return true if valid else false
+        var name = state.player.name.trim();
+        var email = state.player.email.trim();
+
+        if (name.length < 2 || name.length > 30) {
+            errName.textContent = "Name must be 2–30 characters.";
+            return false;
+        }
+
+        
+        var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(email)) {
+            errEmail.textContent = "Invalid email address. (example: a@b.com)";
+            return false;
+        }
         return true;
     }
 
