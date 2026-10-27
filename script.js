@@ -186,6 +186,18 @@
     function loadProgress() {
         // TODO: implement robust load:
         // - Return default { bestScore: 0, bestTotal: 0, attempts: 0 } if missing/invalid
+        try {
+            var data = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (data && typeof data === "object") {
+                return {
+                    bestScore: typeof data.bestScore === "number" ? data.bestScore : 0,
+                    bestTotal: typeof data.bestTotal === "number" ? data.bestTotal : 0,
+                    attempts: typeof data.attempts === "number" ? data.attempts : 0
+                };
+            }
+        } catch (e) {
+            // ignore JSON parse errors
+        }
         return { bestScore: 0, bestTotal: 0, attempts: 0 };
     }
 
@@ -194,6 +206,7 @@
     // ======================================================
     function saveProgress(obj) {
         // TODO: JSON.stringify + localStorage.setItem(STORAGE_KEY, ...)
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
     }
 
     // ======================================================
