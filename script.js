@@ -164,8 +164,8 @@
         // - Show errors in errName / errEmail
         // - Return true if valid else false
 
-        var name = state.player.name.trim();
-        var email = state.player.email.trim();
+        var name = document.getElementById("name").value.trim();
+        var email = document.getElementById("email").value.trim();
 
         if (name.length < 2 || name.length > 30) {
             errName.textContent = "Name must be 2–30 characters.";
@@ -326,6 +326,8 @@
         // Example:
         // q.userChoice = choiceText;
 
+        q.userChoice = choiceText;
+
         if (choiceText === q.correct) {
             state.score = state.score + 1;
             scoreEl.textContent = String(state.score);
@@ -369,6 +371,12 @@
             //  ok = (yourAns === qq.correct)
             //  use lines.push to show ✓ or ✗
 
+            var userAnswer = qq.userChoice;
+            var ok = (userAnswer === qq.correct);
+            lines.push("Your answer: " + userAnswer);
+            lines.push("Correct answer: " + qq.correct);
+            lines.push("Result: " + (ok ? "✓" : "✗"));
+
             lines.push("");
         }
 
@@ -403,6 +411,8 @@
         // TODO : Set (ROUND.difficulty) based on the dropdown selection (state - player - mode).
         // The dropdown provides: "easy", "medium", or "hard"
 
+        var difficultyDropdown = document.getElementById("mode");
+        ROUND.difficulty = difficultyDropdown.value;
 
         beginRound();
         showOnly(screenQuiz);
