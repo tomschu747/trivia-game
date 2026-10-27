@@ -163,6 +163,7 @@
         // - Email: basic valid shape (example: a@b.com)
         // - Show errors in errName / errEmail
         // - Return true if valid else false
+
         var name = state.player.name.trim();
         var email = state.player.email.trim();
 
@@ -219,7 +220,13 @@
         // - var data = await res.json()
         // - if (!data.token) throw Error(...)
         // - return data.token
-        return null;
+        var res = await fetch(API.token);
+        if (!res.ok) throw Error("Failed to fetch token");
+
+        var data = await res.json();
+        if (!data.token) throw Error("Token not found");
+
+        return data.token;
     }
 
     // ======================================================
@@ -233,7 +240,19 @@
         //   0 -> return results
         //   5 -> throw rate limit error
         //   else -> throw generic error
-        return [];
+        var url = API.questionsUrl(cfg.amount, cfg.difficulty, state.player.category, state.token);
+
+        var response = await fetch(url);
+        if (!response.ok) throw Error("Failed to fetch questions");
+
+        var data = await response.json();
+        if (data.response_code === 0) {
+            return data.results;
+        } else if (data.response_code === 5) {
+            throw Error("Rate limit exceeded");
+        } else {
+            throw Error("Failed to fetch questions");
+        }
     }
 
     // Display best score summary on Start screen
